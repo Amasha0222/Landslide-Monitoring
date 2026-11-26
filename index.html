@@ -4,16 +4,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Landslide Monitoring Dashboard</title>
 
-<!-- Chart.js for sensor graphs -->
+<title>Landslide Monitoring System</title>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
@@ -25,51 +25,50 @@ body {
 header {
     background: #173b35;
     color: white;
-    padding: 25px 5%;
+    padding: 28px 5%;
 }
 
 header h1 {
-    font-size: 27px;
-    margin-bottom: 8px;
+    font-size: 26px;
+    margin-bottom: 10px;
 }
 
 header p {
-    color: #d3e4df;
+    color: #d5e5df;
+    margin-top: 5px;
     font-size: 14px;
 }
 
 .container {
     max-width: 1200px;
-    margin: 30px auto;
-    padding: 0 20px;
+    margin: auto;
+    padding: 25px 20px;
 }
 
 .section-title {
-    margin: 25px 0 15px;
     font-size: 20px;
+    margin: 25px 0 15px;
 }
 
-.status-card {
+.status-card, .sensor-card, .chart-card {
     background: white;
-    padding: 22px;
     border-radius: 12px;
-    margin-bottom: 22px;
+    padding: 23px;
     box-shadow: 0 2px 10px #0000000c;
 }
 
-.status-card h2 {
-    font-size: 17px;
-    margin-bottom: 12px;
+.status-card {
+    border-left: 5px solid #16a34a;
 }
 
 #riskStatus {
-    font-size: 25px;
+    font-size: 26px;
     font-weight: bold;
-    color: #64748b;
+    margin: 12px 0;
+    color: #16a34a;
 }
 
 #riskMessage {
-    margin-top: 8px;
     color: #64748b;
     font-size: 14px;
 }
@@ -80,21 +79,14 @@ header p {
     gap: 18px;
 }
 
-.sensor-card {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px #0000000c;
-}
-
 .sensor-card h3 {
     color: #64748b;
     font-size: 15px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 .sensor-value {
-    font-size: 32px;
+    font-size: 34px;
     font-weight: bold;
     color: #173b35;
 }
@@ -104,24 +96,10 @@ header p {
     color: #64748b;
 }
 
-.sensor-time {
-    font-size: 12px;
-    color: #94a3b8;
-    margin-top: 12px;
-}
-
 .chart-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-}
-
-.chart-card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    min-width: 0;
-    box-shadow: 0 2px 10px #0000000c;
 }
 
 .chart-card h3 {
@@ -134,19 +112,22 @@ header p {
     position: relative;
 }
 
+.info {
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 20px;
+}
+
 .footer {
     text-align: center;
     padding: 25px;
-    color: #64748b;
+    background: #173b35;
+    color: white;
     font-size: 13px;
 }
 
-@media (max-width: 750px) {
-    .sensor-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .chart-grid {
+@media(max-width:750px) {
+    .sensor-grid, .chart-grid {
         grid-template-columns: 1fr;
     }
 
@@ -162,17 +143,17 @@ header p {
 <header>
     <h1>LANDSLIDE MONITORING SYSTEM</h1>
     <p>IoT-Based Landslide Risk Monitoring Dashboard</p>
-    <p>Kandy – Kegalle Section, A1 Road, Sri Lanka</p>
+    <p>Kandy – Kegalle Section Along A1 Road, Sri Lanka</p>
 </header>
 
 <div class="container">
 
-    <h2 class="section-title">Monitoring Overview</h2>
+    <h2 class="section-title">Current Monitoring Status</h2>
 
-    <div class="status-card">
-        <h2>Current Risk Status</h2>
-        <div id="riskStatus">Connecting...</div>
-        <p id="riskMessage">Waiting for sensor data...</p>
+    <div class="status-card" id="statusCard">
+        <h3>LANDSLIDE RISK LEVEL</h3>
+        <div id="riskStatus">CONNECTING...</div>
+        <p id="riskMessage">Retrieving sensor information...</p>
     </div>
 
     <h2 class="section-title">Real-Time Sensor Readings</h2>
@@ -180,35 +161,32 @@ header p {
     <div class="sensor-grid">
 
         <div class="sensor-card">
-            <h3>Soil Moisture</h3>
+            <h3>SOIL MOISTURE</h3>
             <div class="sensor-value">
                 <span id="moisture">--</span>
                 <span class="unit">%</span>
             </div>
-            <p class="sensor-time">Latest sensor reading</p>
         </div>
 
         <div class="sensor-card">
-            <h3>Tilt Angle</h3>
+            <h3>TILT ANGLE</h3>
             <div class="sensor-value">
                 <span id="tilt">--</span>
                 <span class="unit">°</span>
             </div>
-            <p class="sensor-time">Latest sensor reading</p>
         </div>
 
         <div class="sensor-card">
-            <h3>Rainfall (24 Hours)</h3>
+            <h3>RAINFALL (24 HOURS)</h3>
             <div class="sensor-value">
                 <span id="rainfall">--</span>
                 <span class="unit">mm</span>
             </div>
-            <p class="sensor-time">Latest sensor reading</p>
         </div>
 
     </div>
 
-    <h2 class="section-title">Historical Sensor Data</h2>
+    <h2 class="section-title">Historical Sensor Readings</h2>
 
     <div class="chart-grid">
 
@@ -235,55 +213,66 @@ header p {
 
     </div>
 
-    <p id="lastUpdated" style="margin-top:20px; color:#64748b;">
+    <p class="info" id="lastUpdated">
         Last updated: Waiting for data
+    </p>
+
+    <p class="info">
+        Data source: ThingSpeak IoT Cloud Platform
     </p>
 
 </div>
 
 <div class="footer">
-    IoT-Based Landslide Monitoring Project | Sri Lanka
+    IoT-Based Landslide Monitoring Research Project | Sri Lanka
 </div>
 
 <script>
 
 // ======================================
-// 1. THINGSPEAK CONFIGURATION
+// THINGSPEAK CONFIGURATION
 // ======================================
 
-// Enter your ThingSpeak Channel ID
-const CHANNEL_ID = " 3597466";
+// Enter your PUBLIC ThingSpeak Channel ID
 
-// Enter your ThingSpeak READ API KEY
-const READ_API_KEY = "8ACN3MM5JSI9B730";
+const CHANNEL_ID = "3597466";
 
-// ThingSpeak field allocation
+// Public channel - no Read API Key required
+
+const API_URL =
+`https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?results=20`;
+
+// Field allocation
+
 const FIELD_MOISTURE = "field1";
 const FIELD_TILT = "field2";
 const FIELD_RAINFALL = "field3";
 
+
 // ======================================
-// 2. RISK THRESHOLD CONFIGURATION
+// RISK THRESHOLDS
 // ======================================
 
-// Replace these example values with your
-// experimentally calibrated thresholds.
+// Enter calibrated values before using risk assessment
 
-const SOIL_WARNING = 60; // Example: 60
-const TILT_WARNING = 10; // Example: 5
+const SOIL_WARNING = null;
+const TILT_WARNING = null;
 
-// NBRO rainfall warning reference levels
+// Rainfall reference thresholds (24-hour accumulation)
+
 const RAIN_WARNING = 75;
 const RAIN_ALERT = 100;
 const RAIN_HIGH = 150;
 
+
 // ======================================
-// 3. CHART CONFIGURATION
+// CREATE SENSOR GRAPHS
 // ======================================
 
 function createChart(id, label, color, unit) {
 
     return new Chart(document.getElementById(id), {
+
         type: "line",
 
         data: {
@@ -303,12 +292,6 @@ function createChart(id, label, color, unit) {
             responsive: true,
             maintainAspectRatio: false,
 
-            plugins: {
-                legend: {
-                    display: true
-                }
-            },
-
             scales: {
                 y: {
                     title: {
@@ -316,7 +299,6 @@ function createChart(id, label, color, unit) {
                         text: unit
                     }
                 },
-
                 x: {
                     ticks: {
                         maxTicksLimit: 6
@@ -339,79 +321,105 @@ const rainChart = createChart(
     "rainChart", "Rainfall", "#3498db", "mm"
 );
 
+
 // ======================================
-// 4. GET DATA FROM THINGSPEAK
+// RETRIEVE THINGSPEAK DATA
 // ======================================
 
 async function getSensorData() {
 
-    const apiURL =
-    `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}&results=20`;
-
     try {
 
-        const response = await fetch(apiURL);
+        const response = await fetch(API_URL);
 
         if (!response.ok) {
-            throw new Error("Unable to retrieve ThingSpeak data");
+            throw new Error("ThingSpeak connection failed");
         }
 
         const data = await response.json();
 
         if (!data.feeds || data.feeds.length === 0) {
-            throw new Error("No sensor data available");
+            throw new Error("No sensor readings available");
         }
 
-        // Find the latest feed containing data
+        // Latest feed
         const latest = [...data.feeds].reverse().find(feed =>
-            feed[FIELD_MOISTURE] !== null ||
-            feed[FIELD_TILT] !== null ||
-            feed[FIELD_RAINFALL] !== null
+            feed[fieldName(FIELD_MOISTURE)] != null ||
+            feed[fieldName(FIELD_TILT)] != null ||
+            feed[fieldName(FIELD_RAINFALL)] != null
         );
 
         if (!latest) {
             throw new Error("No valid sensor readings found");
         }
 
-        const moisture = Number(latest[FIELD_MOISTURE]);
-        const tilt = Number(latest[FIELD_TILT]);
-        const rainfall = Number(latest[FIELD_RAINFALL]);
+        // Read sensor values
+        const moisture = readValue(latest, FIELD_MOISTURE);
+        const tilt = readValue(latest, FIELD_TILT);
+        const rainfall = readValue(latest, FIELD_RAINFALL);
 
-        // Display current sensor readings
-        document.getElementById("moisture").textContent =
-            Number.isFinite(moisture) ? moisture.toFixed(1) : "--";
+        // Display sensor readings
+        displayValue("moisture", moisture, 1);
+        displayValue("tilt", tilt, 2);
+        displayValue("rainfall", rainfall, 1);
 
-        document.getElementById("tilt").textContent =
-            Number.isFinite(tilt) ? tilt.toFixed(2) : "--";
-
-        document.getElementById("rainfall").textContent =
-            Number.isFinite(rainfall) ? rainfall.toFixed(1) : "--";
-
-        // Display last updated time
+        // Update time
         document.getElementById("lastUpdated").textContent =
             "Last updated: " +
             new Date(latest.created_at).toLocaleString();
 
-        // Update historical charts
+        // Update graphs
         updateCharts(data.feeds);
 
-        // Calculate risk status
+        // Update risk level
         calculateRisk(moisture, tilt, rainfall);
 
-    } catch (error) {
+    }
+
+    catch(error) {
 
         console.error(error);
 
         document.getElementById("riskStatus").textContent =
             "DATA UNAVAILABLE";
 
+        document.getElementById("riskStatus").style.color =
+            "#dc2626";
+
         document.getElementById("riskMessage").textContent =
             error.message;
+
+        document.getElementById("statusCard").style.borderLeftColor =
+            "#dc2626";
     }
 }
 
+function fieldName(field) {
+    return field;
+}
+
+function readValue(feed, field) {
+
+    const value = feed[field];
+
+    if (value === null || value === undefined || value === "") {
+        return NaN;
+    }
+
+    const number = Number(value);
+
+    return Number.isFinite(number) ? number : NaN;
+}
+
+function displayValue(id, value, decimals) {
+
+    document.getElementById(id).textContent =
+        Number.isFinite(value) ? value.toFixed(decimals) : "--";
+}
+
+
 // ======================================
-// 5. UPDATE SENSOR GRAPHS
+// UPDATE GRAPHS
 // ======================================
 
 function updateCharts(feeds) {
@@ -421,9 +429,7 @@ function updateCharts(feeds) {
     );
 
     function values(field) {
-        return feeds.map(feed =>
-            feed[field] === null ? null : Number(feed[field])
-        );
+        return feeds.map(feed => readValue(feed, field));
     }
 
     moistureChart.data.labels = labels;
@@ -442,50 +448,51 @@ function updateCharts(feeds) {
     rainChart.update();
 }
 
+
 // ======================================
-// 6. LANDSLIDE RISK STATUS
+// RISK LEVEL CALCULATION
 // ======================================
 
 function calculateRisk(moisture, tilt, rainfall) {
 
-    const status = document.getElementById("riskStatus");
-    const message = document.getElementById("riskMessage");
-
     let level = 0;
     let reasons = [];
 
+    // Rainfall threshold
     if (Number.isFinite(rainfall)) {
 
         if (rainfall >= RAIN_HIGH) {
             level = Math.max(level, 3);
-            reasons.push("Rainfall reached 150 mm or more");
+            reasons.push("Rainfall >= 150 mm");
         }
 
         else if (rainfall >= RAIN_ALERT) {
             level = Math.max(level, 2);
-            reasons.push("Rainfall reached 100 mm or more");
+            reasons.push("Rainfall >= 100 mm");
         }
 
         else if (rainfall >= RAIN_WARNING) {
             level = Math.max(level, 1);
-            reasons.push("Rainfall reached 75 mm or more");
+            reasons.push("Rainfall >= 75 mm");
         }
     }
 
+    // Soil moisture threshold
     if (SOIL_WARNING !== null &&
         Number.isFinite(moisture) &&
         moisture >= SOIL_WARNING) {
 
         level = Math.max(level, 2);
-        reasons.push("Soil moisture exceeded the configured threshold");
+        reasons.push("Soil moisture threshold exceeded");
     }
 
+    // Tilt threshold
     if (TILT_WARNING !== null &&
         Number.isFinite(tilt) &&
         Math.abs(tilt) >= TILT_WARNING) {
 
         level = Math.max(level, 3);
-        reasons.push("Tilt exceeded the configured threshold");
+        reasons.push("Tilt threshold exceeded");
     }
 
     const statuses = [
@@ -502,19 +509,26 @@ function calculateRisk(moisture, tilt, rainfall) {
         "#dc2626"
     ];
 
+    const status = document.getElementById("riskStatus");
+    const message = document.getElementById("riskMessage");
+    const card = document.getElementById("statusCard");
+
     status.textContent = statuses[level];
     status.style.color = colors[level];
 
+    card.style.borderLeftColor = colors[level];
+
     message.textContent = reasons.length
         ? reasons.join(" | ")
-        : "No configured warning thresholds have been exceeded.";
+        : "No configured warning thresholds exceeded.";
 }
 
+
 // ======================================
-// 7. AUTOMATIC DATA REFRESH
+// AUTOMATIC REFRESH
 // ======================================
 
-// Load data immediately
+// First data retrieval
 getSensorData();
 
 // Refresh every 20 seconds
@@ -524,3 +538,4 @@ setInterval(getSensorData, 20000);
 
 </body>
 </html>
+
